@@ -1,8 +1,7 @@
 # simple-vue
 
-A test project for form validation with Zod and Vuetify. See [docs/validation.md](docs/validation.md).
-
-This template should help get you started developing with Vue 3 in Vite.
+A test project for form validation with Zod and Vuetify.
+See [docs/form-validation-guide.md](docs/form-validation-guide.md) for how to apply validation on a form.
 
 ## Project Setup
 
