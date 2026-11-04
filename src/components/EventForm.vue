@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ref } from 'vue'
+
 import DateTimeField from './DateTimeField.vue'
 import EmailField from './fields/EmailField.vue'
 import { createEvent, updateEvent } from '@/api/forms'
@@ -13,7 +15,7 @@ const props = defineProps<{
 
 const isEdit = props.id !== undefined
 
-const { form, formRef, field, submit, submitting } = useZodForm(
+const { form, formRef, field, submit, submitting, formError } = useZodForm(
   isEdit ? editEventSchema : createEventSchema,
   {
     title: '',
@@ -27,8 +29,10 @@ const { form, formRef, field, submit, submitting } = useZodForm(
   },
 )
 
-function onSubmit() {
-  return submit((data) =>
+const saved = ref(false)
+
+async function onSubmit() {
+  saved.value = await submit((data) =>
     props.id !== undefined ? updateEvent(props.id, data) : createEvent(data),
   )
 }
@@ -38,6 +42,7 @@ function onSubmit() {
   <v-card :title="isEdit ? `Edit event #${id}` : 'Create event'">
     <v-card-text>
       <v-form ref="formRef" @submit.prevent="onSubmit">
+        <v-alert v-if="formError" type="error" variant="tonal" class="mb-4" :text="formError" />
         <v-text-field v-model="form.title" label="Title" v-bind="field('title')" />
         <v-textarea
           v-model="form.description"
@@ -74,5 +79,6 @@ function onSubmit() {
         </v-btn>
       </v-form>
     </v-card-text>
+    <v-snackbar v-model="saved" color="success" :timeout="3000" :text="isEdit ? 'Event saved' : 'Event created'" />
   </v-card>
 </template>

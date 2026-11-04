@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ref } from 'vue'
+
 import DateTimeField from './DateTimeField.vue'
 import EmailField from './fields/EmailField.vue'
 import NameField from './fields/NameField.vue'
@@ -6,7 +8,7 @@ import { createBooking } from '@/api/forms'
 import { bookingSchema, roomTypes } from '@/schemas/booking'
 import { useZodForm } from '@/validation/useZodForm'
 
-const { form, formRef, field, submit, submitting } = useZodForm(bookingSchema, {
+const { form, formRef, field, submit, submitting, formError } = useZodForm(bookingSchema, {
   guestName: '',
   guestEmail: '',
   checkIn: null,
@@ -17,8 +19,10 @@ const { form, formRef, field, submit, submitting } = useZodForm(bookingSchema, {
   specialRequests: '',
 })
 
-function onSubmit() {
-  return submit(createBooking)
+const saved = ref(false)
+
+async function onSubmit() {
+  saved.value = await submit(createBooking)
 }
 </script>
 
@@ -26,6 +30,7 @@ function onSubmit() {
   <v-card title="Book a room">
     <v-card-text>
       <v-form ref="formRef" @submit.prevent="onSubmit">
+        <v-alert v-if="formError" type="error" variant="tonal" class="mb-4" :text="formError" />
         <NameField v-model="form.guestName" label="Guest name" v-bind="field('guestName')" />
         <EmailField v-model="form.guestEmail" label="Guest email" v-bind="field('guestEmail')" />
 
@@ -58,5 +63,6 @@ function onSubmit() {
         <v-btn type="submit" color="primary" :loading="submitting">Book room</v-btn>
       </v-form>
     </v-card-text>
+    <v-snackbar v-model="saved" color="success" :timeout="3000" text="Room booked" />
   </v-card>
 </template>
