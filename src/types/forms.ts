@@ -1,0 +1,31 @@
+export interface EventInput {
+  title: string
+  description: string
+  organizerEmail: string
+  capacity: number | null
+  ticketPrice: number | null
+  startsAt: Date | null
+  endsAt: Date | null
+}
+
+export interface ProfileInput {
+  fullName: string
+  email: string
+  phone: string
+  age: number | null
+  dateOfBirth: Date | null
+  website: string
+}
+
+export type RoomType = 'single' | 'double' | 'family'
+
+export interface BookingInput {
+  guestName: string
+  guestEmail: string
+  checkIn: Date | null
+  checkOut: Date | null
+  adults: number | null
+  children: number | null
+  roomType: RoomType | null
+  specialRequests: string
+}
