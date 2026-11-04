@@ -2,6 +2,8 @@
 import { ref } from 'vue'
 
 import DateTimeField from './DateTimeField.vue'
+import EmailField from './fields/EmailField.vue'
+import NameField from './fields/NameField.vue'
 import { createBooking } from '@/api/forms'
 import type { BookingInput, RoomType } from '@/types/forms'
 
@@ -38,8 +40,8 @@ async function onSubmit() {
   <v-card title="Book a room">
     <v-card-text>
       <v-form @submit.prevent="onSubmit">
-        <v-text-field v-model="form.guestName" label="Guest name" />
-        <v-text-field v-model="form.guestEmail" label="Guest email" type="email" />
+        <NameField v-model="form.guestName" label="Guest name" />
+        <EmailField v-model="form.guestEmail" label="Guest email" />
 
         <DateTimeField v-model="form.checkIn" label="Check-in" />
         <DateTimeField v-model="form.checkOut" label="Check-out" />

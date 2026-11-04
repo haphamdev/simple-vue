@@ -44,6 +44,30 @@ export function maxDuration<T extends object>(
   )
 }
 
+function ageOn(birthDate: Date, today: Date) {
+  const age = today.getFullYear() - birthDate.getFullYear()
+  const hadBirthday =
+    today.getMonth() > birthDate.getMonth() ||
+    (today.getMonth() === birthDate.getMonth() && today.getDate() >= birthDate.getDate())
+  return hadBirthday ? age : age - 1
+}
+
+export function ageMatchesBirthDate<T extends object>(
+  ageKey: keyof T & string,
+  birthDateKey: keyof T & string,
+  errorMessage = 'Does not match the date of birth ({age} years)',
+) {
+  return z.superRefine<T>(
+    (value, ctx) => {
+      const age = ageOn(value[birthDateKey] as Date, new Date())
+      if (value[ageKey] !== age) {
+        ctx.addIssue({ code: 'custom', path: [ageKey], message: t(errorMessage, { age }) })
+      }
+    },
+    { when: whenValid([ageKey, birthDateKey]) },
+  )
+}
+
 // `limit` returns null when there is nothing to compare against yet (e.g. no room selected).
 export function sumAtMost<T extends object>(
   keys: (keyof T & string)[],

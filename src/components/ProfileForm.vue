@@ -1,51 +1,53 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-
-import { createProfile, updateProfile } from '@/api/forms'
-import type { ProfileInput } from '@/types/forms'
+import AgeField from "./fields/AgeField.vue";
+import EmailField from "./fields/EmailField.vue";
+import NameField from "./fields/NameField.vue";
+import { createProfile, updateProfile } from "@/api/forms";
+import { profileSchema, type ProfileFormValues } from "@/schemas/profile";
+import { useZodForm } from "@/validation/useZodForm";
 
 // Passing an id switches the form to edit mode.
 const props = defineProps<{
-  id?: number
-  initialValues?: ProfileInput
-}>()
+  id?: number;
+  initialValues?: ProfileFormValues;
+}>();
 
-const isEdit = computed(() => props.id !== undefined)
+const isEdit = props.id !== undefined;
 
-const form = ref<ProfileInput>({
-  fullName: '',
-  email: '',
-  phone: '',
+const { form, formRef, field, submit, submitting } = useZodForm(profileSchema, {
+  fullName: "",
+  email: "",
+  phone: "",
   age: null,
   dateOfBirth: null,
-  website: '',
+  website: "",
   ...props.initialValues,
-})
+});
 
-const submitting = ref(false)
-
-async function onSubmit() {
-  submitting.value = true
-  try {
-    if (props.id !== undefined) await updateProfile(props.id, form.value)
-    else await createProfile(form.value)
-  } finally {
-    submitting.value = false
-  }
+function onSubmit() {
+  return submit((data) =>
+    props.id !== undefined ? updateProfile(props.id, data) : createProfile(data),
+  );
 }
 </script>
 
 <template>
   <v-card :title="isEdit ? `Edit profile #${id}` : 'Create profile'">
     <v-card-text>
-      <v-form @submit.prevent="onSubmit">
-        <v-text-field v-model="form.fullName" label="Full name" />
-        <v-text-field v-model="form.email" label="Email" type="email" />
-        <v-text-field v-model="form.phone" label="Phone" type="tel" />
+      <v-form ref="formRef" @submit.prevent="onSubmit">
+        <NameField v-model="form.fullName" v-bind="field('fullName')" />
+        <EmailField v-model="form.email" v-bind="field('email')" />
+        <v-text-field
+          v-model="form.phone"
+          label="Phone"
+          type="tel"
+          autocomplete="tel"
+          v-bind="field('phone')"
+        />
 
         <v-row dense>
           <v-col cols="12" sm="4">
-            <v-number-input v-model="form.age" label="Age" />
+            <AgeField v-model="form.age" v-bind="field('age')" />
           </v-col>
           <v-col cols="12" sm="8">
             <v-date-input
@@ -53,14 +55,20 @@ async function onSubmit() {
               label="Date of birth"
               prepend-icon=""
               prepend-inner-icon="mdi-cake-variant"
+              v-bind="field('dateOfBirth')"
             />
           </v-col>
         </v-row>
 
-        <v-text-field v-model="form.website" label="Website (optional)" type="url" />
+        <v-text-field
+          v-model="form.website"
+          label="Website (optional)"
+          type="url"
+          v-bind="field('website')"
+        />
 
         <v-btn type="submit" color="primary" :loading="submitting">
-          {{ isEdit ? 'Save changes' : 'Create profile' }}
+          {{ isEdit ? "Save changes" : "Create profile" }}
         </v-btn>
       </v-form>
     </v-card-text>
