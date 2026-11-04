@@ -1,6 +1,6 @@
+import type { BookingPayload } from '@/schemas/booking'
 import type { EventPayload } from '@/schemas/event'
 import type { ProfilePayload } from '@/schemas/profile'
-import type { BookingInput } from '@/types/forms'
 
 // Stand-in for an HTTP client: there is no backend, so log the request and fake some latency.
 function fakeRequest(method: 'POST' | 'PUT', url: string, body: unknown): Promise<void> {
@@ -24,6 +24,6 @@ export function updateProfile(id: number, data: ProfilePayload) {
   return fakeRequest('PUT', `/api/profiles/${id}`, data)
 }
 
-export function createBooking(data: BookingInput) {
+export function createBooking(data: BookingPayload) {
   return fakeRequest('POST', '/api/bookings', data)
 }
