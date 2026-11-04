@@ -17,7 +17,7 @@ const eventFields = z.object({
   description: optionalText({ max: 1000 }),
   organizerEmail: email(),
   capacity: integer({ min: 1, max: 10000 }),
-  ticketPrice: money(),
+  ticketPrice: money({ min: 10 }),
   startsAt: requiredDateTime(),
   endsAt: requiredDateTime(),
 })
