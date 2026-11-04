@@ -1,13 +1,3 @@
-export interface EventInput {
-  title: string
-  description: string
-  organizerEmail: string
-  capacity: number | null
-  ticketPrice: number | null
-  startsAt: Date | null
-  endsAt: Date | null
-}
-
 export interface ProfileInput {
   fullName: string
   email: string

@@ -1,4 +1,5 @@
-import type { BookingInput, EventInput, ProfileInput } from '@/types/forms'
+import type { EventPayload } from '@/schemas/event'
+import type { BookingInput, ProfileInput } from '@/types/forms'
 
 // Stand-in for an HTTP client: there is no backend, so log the request and fake some latency.
 function fakeRequest(method: 'POST' | 'PUT', url: string, body: unknown): Promise<void> {
@@ -6,11 +7,11 @@ function fakeRequest(method: 'POST' | 'PUT', url: string, body: unknown): Promis
   return new Promise((resolve) => setTimeout(resolve, 500))
 }
 
-export function createEvent(data: EventInput) {
+export function createEvent(data: EventPayload) {
   return fakeRequest('POST', '/api/events', data)
 }
 
-export function updateEvent(id: number, data: EventInput) {
+export function updateEvent(id: number, data: EventPayload) {
   return fakeRequest('PUT', `/api/events/${id}`, data)
 }
 
