@@ -48,6 +48,9 @@ export function installZodErrorMap() {
             : t('Must be less than {max}', { max })
         }
 
+        case 'invalid_value':
+          return isEmpty(issue.input) ? t('This field is required') : t('Select a valid option')
+
         case 'invalid_format':
           if (issue.format === 'email') return t('Enter a valid email address')
           if (issue.format === 'url') return t('Enter a valid URL')
