@@ -2,10 +2,11 @@
 import BookingForm from './components/BookingForm.vue'
 import EventForm from './components/EventForm.vue'
 import ProfileForm from './components/ProfileForm.vue'
-import type { EventInput, ProfileInput } from './types/forms'
+import type { EventFormValues } from './schemas/event'
+import type { ProfileInput } from './types/forms'
 
 // Pretend these were loaded from the backend for the edit forms.
-const existingEvent: EventInput = {
+const existingEvent: EventFormValues = {
   title: 'Autumn wine tasting',
   description: 'An evening of local wines on the rooftop terrace.',
   organizerEmail: 'events@example.com',
