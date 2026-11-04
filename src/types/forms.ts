@@ -1,12 +1,3 @@
-export interface ProfileInput {
-  fullName: string
-  email: string
-  phone: string
-  age: number | null
-  dateOfBirth: Date | null
-  website: string
-}
-
 export type RoomType = 'single' | 'double' | 'family'
 
 export interface BookingInput {

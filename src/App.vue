@@ -3,7 +3,7 @@ import BookingForm from './components/BookingForm.vue'
 import EventForm from './components/EventForm.vue'
 import ProfileForm from './components/ProfileForm.vue'
 import type { EventFormValues } from './schemas/event'
-import type { ProfileInput } from './types/forms'
+import type { ProfileFormValues } from './schemas/profile'
 
 // Pretend these were loaded from the backend for the edit forms.
 const existingEvent: EventFormValues = {
@@ -16,7 +16,7 @@ const existingEvent: EventFormValues = {
   endsAt: new Date(2026, 11, 12, 21, 30),
 }
 
-const existingProfile: ProfileInput = {
+const existingProfile: ProfileFormValues = {
   fullName: 'Alex Nguyen',
   email: 'alex@example.com',
   phone: '+84 90 123 4567',

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import DateTimeField from './DateTimeField.vue'
+import EmailField from './fields/EmailField.vue'
 import { createEvent, updateEvent } from '@/api/forms'
 import { createEventSchema, editEventSchema, type EventFormValues } from '@/schemas/event'
 import { useZodForm } from '@/validation/useZodForm'
@@ -44,10 +45,9 @@ function onSubmit() {
           rows="3"
           v-bind="field('description')"
         />
-        <v-text-field
+        <EmailField
           v-model="form.organizerEmail"
           label="Organizer email"
-          type="email"
           v-bind="field('organizerEmail')"
         />
 
