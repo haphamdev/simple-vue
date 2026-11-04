@@ -2,6 +2,7 @@
 import BookingForm from './components/BookingForm.vue'
 import EventForm from './components/EventForm.vue'
 import ProfileForm from './components/ProfileForm.vue'
+import { SERVER_ERROR_TEXT, TAKEN_EMAIL } from './api/forms'
 import type { EventFormValues } from './schemas/event'
 import type { ProfileFormValues } from './schemas/profile'
 
@@ -30,6 +31,10 @@ const existingProfile: ProfileFormValues = {
   <v-app>
     <v-main>
       <v-container max-width="720" class="d-flex flex-column ga-6 py-8">
+        <v-alert type="info" variant="tonal" title="Try the fake backend errors">
+          Submit a valid form with <code>{{ TAKEN_EMAIL }}</code> in an email field to get a field
+          error, or type <code>{{ SERVER_ERROR_TEXT }}</code> in any text field to get a server error.
+        </v-alert>
         <EventForm />
         <EventForm :id="42" :initial-values="existingEvent" />
         <ProfileForm />

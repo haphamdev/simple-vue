@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ref } from "vue";
+
 import AgeField from "./fields/AgeField.vue";
 import EmailField from "./fields/EmailField.vue";
 import NameField from "./fields/NameField.vue";
@@ -14,7 +16,7 @@ const props = defineProps<{
 
 const isEdit = props.id !== undefined;
 
-const { form, formRef, field, submit, submitting } = useZodForm(profileSchema, {
+const { form, formRef, field, submit, submitting, formError } = useZodForm(profileSchema, {
   fullName: "",
   email: "",
   phone: "",
@@ -24,8 +26,10 @@ const { form, formRef, field, submit, submitting } = useZodForm(profileSchema, {
   ...props.initialValues,
 });
 
-function onSubmit() {
-  return submit((data) =>
+const saved = ref(false);
+
+async function onSubmit() {
+  saved.value = await submit((data) =>
     props.id !== undefined ? updateProfile(props.id, data) : createProfile(data),
   );
 }
@@ -35,6 +39,7 @@ function onSubmit() {
   <v-card :title="isEdit ? `Edit profile #${id}` : 'Create profile'">
     <v-card-text>
       <v-form ref="formRef" @submit.prevent="onSubmit">
+        <v-alert v-if="formError" type="error" variant="tonal" class="mb-4" :text="formError" />
         <NameField v-model="form.fullName" v-bind="field('fullName')" />
         <EmailField v-model="form.email" v-bind="field('email')" />
         <v-text-field
@@ -72,5 +77,11 @@ function onSubmit() {
         </v-btn>
       </v-form>
     </v-card-text>
+    <v-snackbar
+      v-model="saved"
+      color="success"
+      :timeout="3000"
+      :text="isEdit ? 'Profile saved' : 'Profile created'"
+    />
   </v-card>
 </template>
