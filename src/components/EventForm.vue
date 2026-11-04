@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-import DateTimeField from './DateTimeField.vue'
+import DateTimeField from './fields/DateTimeField.vue'
 import EmailField from './fields/EmailField.vue'
 import { createEvent, updateEvent } from '@/api/forms'
 import { createEventSchema, editEventSchema, type EventFormValues } from '@/schemas/event'

@@ -22,7 +22,7 @@ src/validation/
   useZodForm.ts    connects a schema to a v-form
 src/schemas/       one file per form: schema + its types
 src/components/fields/   NameField, EmailField, AgeField: look only, no rules
-src/components/DateTimeField.vue   date + time pickers combined into one value
+                         DateTimeField: date + time pickers combined into one value
 src/plugins/vuetify.ts   sets validate-on="blur invalid-input lazy" for every v-form
 src/api/ApiError.ts      backend error shape (status, message, errors per field)
 ```
