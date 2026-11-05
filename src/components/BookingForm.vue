@@ -6,6 +6,7 @@ import DateTimeField from "./DateTimeField.vue";
 import { createBooking } from "@/api/forms";
 import type { BookingInput, RoomType } from "@/types/forms";
 import { bookingSchema, roomCapacity } from "@/validation/bookingSchema";
+import { vuetifyConfig } from "@/validation/vuetify";
 
 const roomTypes: { title: string; value: RoomType }[] = [
   { title: `Single (${roomCapacity.single} guest)`, value: "single" },
@@ -14,7 +15,7 @@ const roomTypes: { title: string; value: RoomType }[] = [
 ];
 
 // Explicit type: vee-validate can't infer it from the schema when initialValues is also passed.
-const { defineField, errors, handleSubmit, isSubmitting } = useForm<BookingInput>({
+const { defineField, handleSubmit, isSubmitting } = useForm<BookingInput>({
   validationSchema: toTypedSchema(bookingSchema),
   initialValues: {
     guestName: "",
@@ -28,14 +29,14 @@ const { defineField, errors, handleSubmit, isSubmitting } = useForm<BookingInput
   },
 });
 
-const [guestName] = defineField("guestName");
-const [guestEmail] = defineField("guestEmail");
-const [checkIn] = defineField("checkIn");
-const [checkOut] = defineField("checkOut");
-const [adults] = defineField("adults");
-const [children] = defineField("children");
-const [roomType] = defineField("roomType");
-const [specialRequests] = defineField("specialRequests");
+const [guestName, guestNameAttrs] = defineField("guestName", vuetifyConfig);
+const [guestEmail, guestEmailAttrs] = defineField("guestEmail", vuetifyConfig);
+const [checkIn, checkInAttrs] = defineField("checkIn", vuetifyConfig);
+const [checkOut, checkOutAttrs] = defineField("checkOut", vuetifyConfig);
+const [adults, adultsAttrs] = defineField("adults", vuetifyConfig);
+const [children, childrenAttrs] = defineField("children", vuetifyConfig);
+const [roomType, roomTypeAttrs] = defineField("roomType", vuetifyConfig);
+const [specialRequests, specialRequestsAttrs] = defineField("specialRequests", vuetifyConfig);
 
 const onSubmit = handleSubmit(async (values) => {
   await createBooking(values);
@@ -46,38 +47,33 @@ const onSubmit = handleSubmit(async (values) => {
   <v-card title="Book a room">
     <v-card-text>
       <v-form @submit.prevent="onSubmit">
-        <v-text-field v-model="guestName" label="Guest name" :error-messages="errors.guestName" />
+        <v-text-field v-model="guestName" v-bind="guestNameAttrs" label="Guest name" />
         <v-text-field
           v-model="guestEmail"
+          v-bind="guestEmailAttrs"
           label="Guest email"
           type="email"
-          :error-messages="errors.guestEmail"
         />
 
-        <DateTimeField v-model="checkIn" label="Check-in" :error-messages="errors.checkIn" />
-        <DateTimeField v-model="checkOut" label="Check-out" :error-messages="errors.checkOut" />
+        <DateTimeField v-model="checkIn" v-bind="checkInAttrs" label="Check-in" />
+        <DateTimeField v-model="checkOut" v-bind="checkOutAttrs" label="Check-out" />
 
-        <v-select
-          v-model="roomType"
-          :items="roomTypes"
-          label="Room type"
-          :error-messages="errors.roomType"
-        />
+        <v-select v-model="roomType" v-bind="roomTypeAttrs" :items="roomTypes" label="Room type" />
 
         <v-row dense>
           <v-col cols="12" sm="6">
-            <v-number-input v-model="adults" label="Adults" :error-messages="errors.adults" />
+            <v-number-input v-model="adults" v-bind="adultsAttrs" label="Adults" />
           </v-col>
           <v-col cols="12" sm="6">
-            <v-number-input v-model="children" label="Children" :error-messages="errors.children" />
+            <v-number-input v-model="children" v-bind="childrenAttrs" label="Children" />
           </v-col>
         </v-row>
 
         <v-textarea
           v-model="specialRequests"
+          v-bind="specialRequestsAttrs"
           label="Special requests"
           rows="3"
-          :error-messages="errors.specialRequests"
         />
 
         <v-btn type="submit" color="primary" :loading="isSubmitting">Book room</v-btn>

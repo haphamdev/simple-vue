@@ -6,6 +6,7 @@ import { toTypedSchema } from "@vee-validate/zod";
 import { createProfile, updateProfile } from "@/api/forms";
 import type { ProfileInput } from "@/types/forms";
 import { profileSchema } from "@/validation/profileSchema";
+import { vuetifyConfig } from "@/validation/vuetify";
 
 // Passing an id switches the form to edit mode.
 const props = defineProps<{
@@ -16,7 +17,7 @@ const props = defineProps<{
 const isEdit = computed(() => props.id !== undefined);
 
 // Explicit type: vee-validate can't infer it from the schema when initialValues is also passed.
-const { defineField, errors, handleSubmit, isSubmitting } = useForm<ProfileInput>({
+const { defineField, handleSubmit, isSubmitting } = useForm<ProfileInput>({
   validationSchema: toTypedSchema(profileSchema),
   initialValues: {
     fullName: "",
@@ -29,12 +30,12 @@ const { defineField, errors, handleSubmit, isSubmitting } = useForm<ProfileInput
   },
 });
 
-const [fullName] = defineField("fullName");
-const [email] = defineField("email");
-const [phone] = defineField("phone");
-const [age] = defineField("age");
-const [dateOfBirth] = defineField("dateOfBirth");
-const [website] = defineField("website");
+const [fullName, fullNameAttrs] = defineField("fullName", vuetifyConfig);
+const [email, emailAttrs] = defineField("email", vuetifyConfig);
+const [phone, phoneAttrs] = defineField("phone", vuetifyConfig);
+const [age, ageAttrs] = defineField("age", vuetifyConfig);
+const [dateOfBirth, dateOfBirthAttrs] = defineField("dateOfBirth", vuetifyConfig);
+const [website, websiteAttrs] = defineField("website", vuetifyConfig);
 
 const onSubmit = handleSubmit(async (values) => {
   if (props.id !== undefined) await updateProfile(props.id, values);
@@ -46,30 +47,30 @@ const onSubmit = handleSubmit(async (values) => {
   <v-card :title="isEdit ? `Edit profile #${id}` : 'Create profile'">
     <v-card-text>
       <v-form @submit.prevent="onSubmit">
-        <v-text-field v-model="fullName" label="Full name" :error-messages="errors.fullName" />
-        <v-text-field v-model="email" label="Email" type="email" :error-messages="errors.email" />
-        <v-text-field v-model="phone" label="Phone" type="tel" :error-messages="errors.phone" />
+        <v-text-field v-model="fullName" v-bind="fullNameAttrs" label="Full name" />
+        <v-text-field v-model="email" v-bind="emailAttrs" label="Email" type="email" />
+        <v-text-field v-model="phone" v-bind="phoneAttrs" label="Phone" type="tel" />
 
         <v-row dense>
           <v-col cols="12" sm="4">
-            <v-number-input v-model="age" label="Age" :error-messages="errors.age" />
+            <v-number-input v-model="age" v-bind="ageAttrs" label="Age" />
           </v-col>
           <v-col cols="12" sm="8">
             <v-date-input
               v-model="dateOfBirth"
+              v-bind="dateOfBirthAttrs"
               label="Date of birth"
               prepend-icon=""
               prepend-inner-icon="mdi-cake-variant"
-              :error-messages="errors.dateOfBirth"
             />
           </v-col>
         </v-row>
 
         <v-text-field
           v-model="website"
+          v-bind="websiteAttrs"
           label="Website (optional)"
           type="url"
-          :error-messages="errors.website"
         />
 
         <v-btn type="submit" color="primary" :loading="isSubmitting">
