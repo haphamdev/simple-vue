@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 
-defineProps<{ label: string }>()
+defineProps<{ label: string; errorMessages?: string }>()
 
 // Combined value: only set once both a date and a time are picked.
 const model = defineModel<Date | null>({ default: null })
@@ -46,6 +46,7 @@ watch([date, time], () => {
         :label="`${label} (date)`"
         prepend-icon=""
         prepend-inner-icon="mdi-calendar"
+        :error-messages="errorMessages"
       />
     </v-col>
     <v-col cols="12" sm="5">
